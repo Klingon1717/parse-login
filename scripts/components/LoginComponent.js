@@ -1,7 +1,7 @@
 var React = require('react');
 
 module.exports = React.createClass({
-		getInitialState: function() {
+	getInitialState: function() {
 		return { error: null };
 	},
 	render: function() {
@@ -30,37 +30,35 @@ module.exports = React.createClass({
 							</div>
 						</div>
 						<div className="row">
-							<button className="waves-effect waves-light btn">Register</button>
+							<button className="waves-effect waves-light btn">Login</button>
 						</div>
 					</form>
 				</div>
 			</div>
 		);
 	},
-			onLogin: function(e){
-			e.preventDefault();
-			
-			var email = this.refs.email.getDOMNode().value;
-			var password = this.refs.password.getDOMNode().value;
-
-			var user = new Parse.User();
-			user.set('username', email);
-			user.set('password', password);
-			user.set('email', email);
-					user.signUp(null, {
-			success: (user) => {
-				console.log('success', user);
-				this.setState({
-					error: null
-				});
-				this.props.router.navigate('dashboard',  {trigger: true});
+	onLogin: function(e) {
+		e.preventDefault();
+		var user = new Parse.User();
+		user.signUp(
+			{
+				username: this.refs.email.getDOMNode().value,
+				password: this.refs.password.getDOMNode().value,
+				email: this.refs.email.getDOMNode().value
 			},
-			error: (user, err) => {
-				console.log('error', user, err);
-				this.setState({
-					error: err.message
-				});
+			{
+				success: (u) => {
+					this.props.router.navigate('dashboard', {trigger: true});
+				},
+				error: (u, error) => {
+					this.setState({
+						error: error.message
+					});
+					this.props.router.navigate('register', {trigger: true});
+					
+					
+				}
 			}
-		});
+		);
 	}
 });

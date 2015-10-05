@@ -32647,7 +32647,7 @@ module.exports = React.createClass({
 						React.createElement(
 							"button",
 							{ className: "waves-effect waves-light btn" },
-							"Register"
+							"Login"
 						)
 					)
 				)
@@ -32658,27 +32658,20 @@ module.exports = React.createClass({
 		var _this = this;
 
 		e.preventDefault();
-
-		var email = this.refs.email.getDOMNode().value;
-		var password = this.refs.password.getDOMNode().value;
-
 		var user = new Parse.User();
-		user.set('username', email);
-		user.set('password', password);
-		user.set('email', email);
-		user.signUp(null, {
-			success: function success(user) {
-				console.log('success', user);
-				_this.setState({
-					error: null
-				});
+		user.signUp({
+			username: this.refs.email.getDOMNode().value,
+			password: this.refs.password.getDOMNode().value,
+			email: this.refs.email.getDOMNode().value
+		}, {
+			success: function success(u) {
 				_this.props.router.navigate('dashboard', { trigger: true });
 			},
-			error: function error(user, err) {
-				console.log('error', user, err);
+			error: function error(u, _error) {
 				_this.setState({
-					error: err.message
+					error: _error.message
 				});
+				_this.props.router.navigate('register', { trigger: true });
 			}
 		});
 	}
